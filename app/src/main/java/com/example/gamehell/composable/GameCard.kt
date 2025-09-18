@@ -27,17 +27,32 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.gamehell.data.Games
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun ShowGames(games: List<Games>, modifier: Modifier = Modifier) {
     LazyColumn(
-        modifier = Modifier,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.DarkGray),
         contentPadding = PaddingValues(bottom = 60.dp, top = 35.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        item{
+            Text(text = "The 100 most popular games",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                textAlign = TextAlign.Center,
+                color = Color.White)
+
+        }
         items(games) { game ->
             var expanded by rememberSaveable { mutableStateOf(false) }
 
@@ -51,11 +66,12 @@ fun ShowGames(games: List<Games>, modifier: Modifier = Modifier) {
                     .wrapContentHeight(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(Color(0xFFB8E7F4))
+                colors = CardDefaults.cardColors(Color(0xFF1a2a6c))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = game.name,
+                        color = Color.White,
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.align(Alignment.CenterHorizontally))
                     AsyncImage(
@@ -73,7 +89,8 @@ fun ShowGames(games: List<Games>, modifier: Modifier = Modifier) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Metacritic rating: ${game.description}",
+                            text = "Rating: ${game.rating} (Metacritic)",
+                            color = Color.White,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodyMedium,
@@ -94,13 +111,14 @@ fun ShowGames(games: List<Games>, modifier: Modifier = Modifier) {
                         ) {
                         Text(modifier = Modifier,
                             text = "Release date: ${game.released}",
+                            color = Color.White,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
     }
-}

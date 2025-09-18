@@ -29,8 +29,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             var games by remember { mutableStateOf<List<Games?>>(emptyList()) }
 
-            val APIKEY = "DIN_API_NYCKEL"
+            val APIKEY = ""
             val url = "https://api.rawg.io/api/games?key=$APIKEY&page_size=100"
+
 
             val jsonRequest = JsonObjectRequest(
                 Request.Method.GET,
@@ -43,14 +44,14 @@ class MainActivity : ComponentActivity() {
                         val obj = results.getJSONObject(i)
                         val id = obj.getInt("id")
                         val name = obj.getString("name")
-                        val description = obj.optString("metacritic")
+                        val rating = obj.optString("metacritic")
                         val imageUrl = obj.getString("background_image")
                         val released = obj.getString("released")
 
-                        gameList.add(Games(id, name, description, imageUrl, released))
+                        val game = Games(id, name, rating, imageUrl, released)
+                        gameList.add(game)
 
                     }
-                    games = gameList
                     Log.d("API Response", response.toString())
 
 
