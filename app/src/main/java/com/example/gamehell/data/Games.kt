@@ -7,6 +7,5 @@ data class Games(
     val name: String,
     val rating: String,
     val imageUrl: String,
-    val released: String,
-
+    val released: String
 )
