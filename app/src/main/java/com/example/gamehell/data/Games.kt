@@ -1,9 +1,12 @@
 package com.example.gamehell.data
 
+import android.media.Rating
+
 data class Games(
     val id: Int,
     val name: String,
-    val description: String,
+    val rating: String,
     val imageUrl: String,
-    val released: String
+    val released: String,
+
 )

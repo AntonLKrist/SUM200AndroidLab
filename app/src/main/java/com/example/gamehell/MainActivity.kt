@@ -29,8 +29,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             var games by remember { mutableStateOf<List<Games?>>(emptyList()) }
 
-            val APIKEY = "DIN_API_NYCKEL"
+            val APIKEY = "6fb4f7c4b5d247ec809896fdec6f3af4"
             val url = "https://api.rawg.io/api/games?key=$APIKEY&page_size=100"
+
 
             val jsonRequest = JsonObjectRequest(
                 Request.Method.GET,
@@ -43,14 +44,32 @@ class MainActivity : ComponentActivity() {
                         val obj = results.getJSONObject(i)
                         val id = obj.getInt("id")
                         val name = obj.getString("name")
-                        val description = obj.optString("metacritic")
+                        val rating = obj.optString("metacritic")
                         val imageUrl = obj.getString("background_image")
                         val released = obj.getString("released")
 
-                        gameList.add(Games(id, name, description, imageUrl, released))
+                        val game = Games(id, name, rating, imageUrl, released, "")
+                        gameList.add(game)
+
+                        val descriptionUrl = "https://api.rawg.io/api/games/$id?key=$APIKEY"
+                        val detailsRequest = JsonObjectRequest(
+                            Request.Method.GET,
+                            descriptionUrl,
+                            null,
+                            { detailsResponse ->
+                                val detailsText = detailsResponse.optString("description")
+                                val updatedList = gameList.map{
+                                    if(it?.id == id) it.copy(details = detailsText ) else it
+                                }
+                                games = updatedList
+                            },
+                            {error ->
+                                Log.e("Volley error", error.toString())
+                            }
+                        )
+                        queue.add(detailsRequest)
 
                     }
-                    games = gameList
                     Log.d("API Response", response.toString())
 
 
